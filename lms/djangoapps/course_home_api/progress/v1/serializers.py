@@ -53,10 +53,19 @@ class ChapterSerializer(serializers.Serializer):
     subsections = SubsectionSerializer(source='sections', many=True)
 
 
+class CertificateDataSerializer(serializers.Serializer):
+    cert_status = serializers.CharField()
+    cert_web_view_url = serializers.CharField()
+    download_url = serializers.CharField()
+    msg = serializers.CharField()
+    title = serializers.CharField()
+
+
 class ProgressTabSerializer(serializers.Serializer):
     """
     Serializer for progress tab
     """
+    certificate_data = CertificateDataSerializer()
     course_blocks = CourseBlockSerializer()
     courseware_summary = ChapterSerializer(many=True)
     enrollment_mode = serializers.CharField()

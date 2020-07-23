@@ -21,6 +21,7 @@ from xmodule.modulestore.django import modulestore
 
 from lms.djangoapps.course_blocks.api import get_course_blocks
 import lms.djangoapps.course_blocks.api as course_blocks_api
+from lms.djangoapps.courseware.views.views import get_cert_data
 from lms.djangoapps.grades.api import CourseGradeFactory
 from openedx.core.djangoapps.content.block_structure.transformers import BlockStructureTransformers
 
@@ -99,12 +100,12 @@ class ProgressTabView(RetrieveAPIView):
 
         course_grade = CourseGradeFactory().read(request.user, course)
         courseware_summary = course_grade.chapter_grades.values()
-
         data = {
             'course_blocks': course_blocks,
             'enrollment_mode': enrollment_mode,
             'courseware_summary': courseware_summary,
             'user_timezone': user_timezone,
+            'certificate_data': get_cert_data(request.user, course, enrollment_mode, course_grade),
         }
         context = self.get_serializer_context()
         context['staff_access'] = bool(has_access(request.user, 'staff', course))
